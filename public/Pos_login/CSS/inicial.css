@@ -1,0 +1,16 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    margin: none;
+    padding: none;
+    margin: 0;
+
+}
+
+.form{
+    background-image: url(/public/imagens/Fundo2.jpg);
+    background-size: cover;
+    padding: 8%;
+    display: flex;
+    justify-content: center;
+}
