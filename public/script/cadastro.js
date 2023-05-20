@@ -10,7 +10,7 @@ function cadastrar() {
 
      if(senhaVar != confirmacaoSenhaVar){
         alert( "senha e confirmação de senha diferentes ")
-    } else if (emailVar.indexOf('@') == -1 && emailVar.indexOf('.') == -1) {
+    } else if (emailVar.indexOf('@') == -1 || emailVar.indexOf('.') == -1) {
         alert ("E-mail sem '@' ou '.' ")
     }
 
@@ -40,12 +40,9 @@ function cadastrar() {
 
         console.log("resposta: ", resposta);
 
-        if (resposta) {
+        if (resposta.ok) {
  
-            window.location = "login.html";
-            
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
+            window.location = "./login.html";
         }
     }).catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);

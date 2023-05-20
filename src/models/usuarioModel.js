@@ -25,8 +25,25 @@ function cadastrar(nome, email, senha, peso) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha, peso) VALUES ('${nome}', '${email}', '${senha}', '${peso}');
+        INSERT INTO usuario (nome, email, senha) VALUES ('${nome}', '${email}', '${senha}');
+        
     `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+function insertpesoinicial(email, senha, peso){
+        var instrução2 = `
+        INSERT INTO Controle_de_peso (inicialPesoKG, fkUsuario) VALUES 
+        (${peso}, (select idUsuario from usuario where email = '${email}' and senha = '${senha}'));
+        `
+        return database.executar(instrução2);
+    } 
+function getpeso(id) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", id)
+    var instrucao = `
+    select * from Usuario join Controle_de_Peso on 
+	fkUsuario = idUsuario where idUsuario = ${id};
+        `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
@@ -35,4 +52,6 @@ module.exports = {
     entrar,
     cadastrar,
     listar,
+    getpeso,
+    insertpesoinicial,
 };

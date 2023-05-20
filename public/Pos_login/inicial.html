@@ -1,13 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Usuario</title>
     <link rel="stylesheet" href="CSS/inicial.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body>
- 
+
+<body onload="get_info()">
+
+        
+
+    <header>
+        <div class="container">
+            <img class="img_header" src="imagens/Gym.png" alt="">
+
+
+            <ul class="navbar">
+                <li><a href="index.html"> Home </a></li>
+                <li><a href="cadastro.html"> Cadastro </a></li>
+                <li><a href="Sobre_academia.html"> Sobre academia </a></li>
+                <li><a href="login.html" id="login"> Sair </a></li>
+            </ul>
+        </div>
+
+    </header>
+    <div class="form">
+        <div class="barra_lateral">
+            <div class="foto"></div>
+            <div class="info_usuario">
+                <span> Nome: <b id="nomeusuario"></b></span>
+                <span> Peso inicial:  <b id="pesousuario"> </b> </span>
+
+            </div>
+
+        </div>
+        <div class="formulario">
+            <div class="grafico1">
+                <canvas id="myChart" style="position: relative;height: 40vh;width: 40vw;"></canvas>
+
+            </div>
+            <div class="foto"></div>
+        </div>
+
+    </div>
+
+    </div>
+
+
+
 </body>
+
 </html>
+
+<script>
+    var glob1 = [];
+    var glob2 = [];
+    function chart() {
+        const labels = glob1;
+
+        const data = { 
+            labels: labels,
+            datasets: [{
+                label: 'Peso em KG',
+                backgroundColor: 'gray',
+                borderColor: 'rgb(255, 99, 132)',
+                data: glob2,
+
+            },
+
+
+            ]
+
+
+        };
+
+
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {}
+        };
+
+
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+
+    }
+    function get_info() {
+        var id = sessionStorage.ID_USUARIO;
+        fetch(`/usuarios/getpeso/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    //aqui vai informação json
+                    for(var i = 0; i <= json.length - 1; i++){
+                        glob1.push(json[i].tempoMes)
+                        glob2.push(json[i].pesoPmes)
+
+                    }
+                    console.log(glob1)
+                    console.log(glob2)
+                    pesousuario.innerHTML = json[0].inicialPesoKG
+                    nomeusuario.innerHTML = json[0].nome
+                 chart()
+
+
+                });
+
+            } else {
+
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
+
+
+</script>

@@ -35,10 +35,10 @@ function entrar() {
 
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;
-                sessionStorage.ID_USUARIO = json.id;
+                sessionStorage.ID_USUARIO = json.idUsuario;
 
                 setTimeout(function () {
-                    window.location = "./dashboard/cards.html";
+                    window.location = "./Pos_login/inicial.html";
                 }, 1000); // apenas para exibir o loading
 
             });

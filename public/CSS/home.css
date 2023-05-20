@@ -4,6 +4,7 @@
     margin: none;
     padding: none;
     margin: 0;
+    text-decoration: none;
 
 }
 
@@ -30,6 +31,7 @@ header{
     align-items: center;
     list-style: none;
     justify-content: space-between;
+    color: white;
 
 }
 
