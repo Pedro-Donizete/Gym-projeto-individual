@@ -25,7 +25,7 @@ function cadastrar(nome, email, senha, peso) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucao = `
-        INSERT INTO usuario (nome, email, senha) VALUES ('${nome}', '${email}', '${senha}');
+        INSERT INTO usuario (nome, email, senha, inicialPesoKG) VALUES ('${nome}', '${email}', '${senha}', ${peso});
         
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
@@ -47,6 +47,18 @@ function getpeso(id) {
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
+function insert(peso, mes, id){
+    var instrucao = `
+
+    INSERT INTO Controle_de_Peso(pesoPmes, tempoMes, fkUsuario) VALUES
+    (${peso}, '${mes}', ${id})
+
+
+    `;
+    console.log("executando insert no banco")
+
+    return database.executar(instrucao)
+}
 
 module.exports = {
     entrar,
@@ -54,4 +66,5 @@ module.exports = {
     listar,
     getpeso,
     insertpesoinicial,
+    insert,
 };

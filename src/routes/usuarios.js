@@ -23,4 +23,7 @@ router.post("/autenticar", function (req, res) {
 router.get(`/getpeso/:id`, function(req, res){
     usuarioController.getpeso(req, res)
 })
+router.post(`/inserePesoEMes/:id`, function(req, res){
+    usuarioController.insert(req, res)
+});
 module.exports = router;

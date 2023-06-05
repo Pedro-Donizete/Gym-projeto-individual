@@ -59,6 +59,41 @@ function entrar(req, res) {
     }
 
 }
+function insert(req, res) {
+    var peso = req.body.pesoServer;
+    var mes = req.body.mesServer;
+    var id = req.params.id;
+
+    console.log("aaaaaaaaaaaaaaa")
+
+    
+        usuarioModel.insert(peso, mes, id)
+            .then(
+                function (resultado) {
+                    console.log(`\nResultados encontrados: ${resultado.length}`);
+                    console.log(`Resultados: ${JSON.stringify(resultado)}`); // transforma JSON em String
+
+                    if (resultado.length == 1) {
+                        console.log(resultado);
+                        res.json(resultado[0]);
+                    } else if (resultado.length == 0) {
+                        res.status(403).send("Email e/ou senha inválido(s)");
+                    } else {
+                        res.status(403).send("Mais de um usuário com o mesmo login e senha!");
+                    }
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("\nHouve um erro ao inserir peso: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+
+
+
+
 function getpeso(req, res) {
     var id = req.params.id;
     
@@ -109,24 +144,12 @@ function cadastrar(req, res) {
     } else {
         
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha)
+        usuarioModel.cadastrar(nome, email, senha,peso)
             .then(
-                function (resultado) {
-                    usuarioModel.insertpesoinicial(email, senha, peso).then(
+           
                         function(resp){res.json(resp);}
-                    ).catch(
-                        function (error){
-                            console.log(error);
-                            console.log(
-                                "\nHouve um erro ao realizar o cadastro! Erro: ",
-                                error.sqlMessage
-                            );
-                            res.status(500).json(error.sqlMessage);
-
-                        }
-                        
-                    )
-                }
+                   
+                
             ).catch(
                 function (erro) {
                     console.log(erro);
@@ -146,4 +169,5 @@ module.exports = {
     listar,
     testar,
     getpeso,
+    insert,
 }

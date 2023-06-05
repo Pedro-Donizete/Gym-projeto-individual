@@ -20,12 +20,11 @@ function cadastrar() {
     }
     else {
             console.log("nome" + nomeVar + "\n email " + emailVar + "\n senha " + senhaVar + "\n peso " + pesoVar)
-        }
-
-    // Enviando o valor da nova input
-    fetch("/usuarios/cadastrar", {
-        method: "POST",
-        headers: {
+            
+            // Enviando o valor da nova input
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -37,16 +36,22 @@ function cadastrar() {
             pesoSever: pesoVar
         })
     }).then(function (resposta) {
-
+        
         console.log("resposta: ", resposta);
 
         if (resposta.ok) {
- 
-            window.location = "./login.html";
+            console.log("WWWW")
+        }else{
+                window.location = "./login.html";
+            
         }
     }).catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);
+    
+    
     });
 
     return false;
+}
+
 }

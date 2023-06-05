@@ -13,7 +13,7 @@
 
 <body onload="get_info()">
 
-        
+
 
     <header>
         <div class="container">
@@ -31,10 +31,10 @@
     </header>
     <div class="form">
         <div class="barra_lateral">
-            <div class="foto"></div>
             <div class="info_usuario">
                 <span> Nome: <b id="nomeusuario"></b></span>
-                <span> Peso inicial:  <b id="pesousuario"> </b> </span>
+                <span> Peso inicial: <b id="pesousuario"> </b> </span>
+                <span> peso ganho:  <b id="pesoDiferença"></b></span>
 
             </div>
 
@@ -44,10 +44,25 @@
                 <canvas id="myChart" style="position: relative;height: 40vh;width: 40vw;"></canvas>
 
             </div>
-            <div class="foto"></div>
-        </div>
+            <input placeholder="insira seu peso atual" id="input_peso_atual" type="text">
 
-    </div>
+            <select name="" id="mes">
+                <option value="Janeiro">Janeiro</option>
+                <option value="Fevereiro">Fevereiro</option>
+                <option value="Abril">Abril</option>
+                <option value="Março">Março</option>
+                <option value="Maio">Maio</option>
+                <option value="Junho">Junho</option>
+                <option value="Julho">Julho</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Setembro">Setembro</option>
+                <option value="Outubro">Outubro</option>
+                <option value="Novembro">Novembro</option>
+                <option value="Dezembro">Dezembro</option>
+            </select>
+            <button onclick="inserir()">Inserir</button>
+        </div>
+        
 
     </div>
 
@@ -63,7 +78,7 @@
     function chart() {
         const labels = glob1;
 
-        const data = { 
+        const data = {
             labels: labels,
             datasets: [{
                 label: 'Peso em KG',
@@ -94,7 +109,57 @@
         );
 
     }
+
+
+
+    function inserir() {
+
+        var peso = Number(input_peso_atual.value)
+        var mensal = mes.value
+
+        var id = sessionStorage.ID_USUARIO;
+
+
+        fetch(`/usuarios/inserePesoEMes/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                pesoServer: peso,
+                mesServer: mensal
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+
+
+
+            } else {
+
+                window.location = "./inicial.html"
+
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+
+
+    }
+
+
     function get_info() {
+        glob1 = []
+        glob2 = []
+        var pesoDiferencial = 0;
+
         var id = sessionStorage.ID_USUARIO;
         fetch(`/usuarios/getpeso/${id}`, {
             method: "GET",
@@ -111,17 +176,26 @@
                     console.log(json);
                     console.log(JSON.stringify(json));
 
+                    pesoDiferencial = json[0].inicialPesoKG
+
                     //aqui vai informação json
-                    for(var i = 0; i <= json.length - 1; i++){
+                    for (var i = 0; i <= json.length - 1; i++) {
                         glob1.push(json[i].tempoMes)
                         glob2.push(json[i].pesoPmes)
+
+                        if (json[i].pesoPmes < pesoDiferencial) {
+                            pesoDiferencial -= json[i].pesoPmes
+                        } else {
+                            pesoDiferencial += json[i].pesoPmes
+                        }
 
                     }
                     console.log(glob1)
                     console.log(glob2)
+                    console.log(pesoDiferencial)
                     pesousuario.innerHTML = json[0].inicialPesoKG
                     nomeusuario.innerHTML = json[0].nome
-                 chart()
+                    chart()
 
 
                 });
